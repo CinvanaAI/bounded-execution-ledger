@@ -1,0 +1,14 @@
+{
+  "kind": "captured synthetic execution projection",
+  "command": "npm run demo",
+  "input_example": "examples/first-handler.mjs",
+  "observed_output": {
+    "success": "complete",
+    "output": "hello ledger",
+    "failed": "failed",
+    "denied": "denied",
+    "handlerCalls": 2,
+    "durableRuns": 3
+  },
+  "projection_note": "Selected fields from a successful local run. Machine paths, temporary identifiers and execution timestamps are omitted. Re-run the linked example for fresh evidence."
+}
