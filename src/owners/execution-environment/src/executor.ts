@@ -78,6 +78,8 @@ export class BoundedExecutorService {
   }
 
   async submit(input: BoundedExecutorSubmission): Promise<BoundedExecutorRunRecord> {
+    // Own the request snapshot before asynchronous persistence or handler work.
+    input = structuredClone(input);
     const now = new Date().toISOString();
     const run: BoundedExecutorRunRecord = {
       runId: randomUUID(),

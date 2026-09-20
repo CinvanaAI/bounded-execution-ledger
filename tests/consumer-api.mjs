@@ -20,6 +20,16 @@ try {
   assert.equal(unknown.status, "failed");
   ledger.registerHandler("bad.output", () => [{ body: 42 }]);
   assert.equal((await ledger.submit({ ...request, actionId: "bad.output" })).status, "failed");
+  ledger.registerHandler("demo.snapshot", ({ input }) => [{ label: "Submitted value", mediaType: "text/plain", body: input.text }]);
+  const submitted = { ...request, actionId: "demo.snapshot", input: { text: "at submission" }, ownerRefs: ["original-owner"] };
+  const pending = ledger.submit(submitted);
+  submitted.input.text = "changed by caller";
+  submitted.ownerRefs.push("later-owner");
+  const snapshot = await pending;
+  assert.equal(snapshot.outputs[0].body, "at submission");
+  const saved = await ledger.getRun(snapshot.runId);
+  assert.equal(saved.input.text, "at submission");
+  assert.deepEqual(saved.ownerRefs, ["original-owner"]);
   console.log("Public consumer demonstration passed.");
 } finally {
   // The only recursive cleanup target is the exact directory created above.
